@@ -12,7 +12,6 @@ const { authenticateSession } = userAuth;
 const userRoutes = require('./routes/user')
 const spotifyRoutes = require('./routes/spotify')
 
-
 app.prepare().then(() => {
 
   // Get port to use

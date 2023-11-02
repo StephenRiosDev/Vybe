@@ -16,7 +16,7 @@ const search = async (req, res) => {
   await authorize();
 
   // Construct the request URL
-  const apiUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track`;
+  const apiUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track,album,artist,playlist`;
 
   // Attempt to get search information from Spotify Web API
   axios
@@ -26,6 +26,24 @@ const search = async (req, res) => {
     .catch( err => res.status(500).send(err))
 };
 
+const getGenres = async (req, res) => {
+
+  // Make sure we are authorized
+  await authorize();
+
+  // Construct the request URL
+  const apiUrl = `https://api.spotify.com/v1/recommendations/available-genre-seeds`;
+
+  // Attempt to get genre information from Spotify Web API
+  axios
+    .get(apiUrl, { headers: { Authorization: `Bearer ${cache.spotifyToken.token}` } })
+    .then( res => res.data)
+    .then( data => res.status(200).json(data))
+    .catch( err => res.status(500).send(err))
+}
+
+
+// Authorizes the application to use the Spotify Web API
 const authorize = async () => {
 
   return new Promise((resolve, reject) => {
@@ -63,6 +81,7 @@ const authorize = async () => {
   })
 }
 
+// Checks if we are authorized to use the Spotify Web API
 const isAuthorized = () => {
   
     // If we don't have a token, we are not authorized
@@ -77,5 +96,6 @@ const isAuthorized = () => {
 
 module.exports = {
   search,
+  getGenres,
   authorize
-};
+}
