@@ -7,7 +7,11 @@ const User = db.users;
 
 // Whitelist for pages that do not require authentication
 const whitelist = [
-  /api\/users.+/
+  // User api routes
+  /api\/users.+/,
+
+  // Any non-api routes
+  /^((?!\/api).)*$/
 ];
 
 //Function to check if username or email already exist in the database
@@ -41,7 +45,7 @@ const saveUser = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
+    res.status(500).send("An unexpected error occurred");
   }
 };
 

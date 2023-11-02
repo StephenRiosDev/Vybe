@@ -33,8 +33,6 @@ const signup = async (req, res) => {
       });
 
       res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-      console.log("user", JSON.stringify(user, null, 2));
-      console.log(token);
 
       //send users details
       return res.status(201).send(user);
@@ -42,7 +40,7 @@ const signup = async (req, res) => {
       return res.status(409).send("Details are not correct");
     }
   } catch (error) {
-    console.log(error);
+    res.status(500).send("An unexpected error occurred");
   }
 };
 
@@ -74,8 +72,6 @@ const login = async (req, res) => {
         //if password matches wit the one in the database
         //go ahead and generate a cookie for the user
         res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        console.log("user", JSON.stringify(user, null, 2));
-        console.log(token);
 
         // Add the user session for this user now that they are logged in
         UserSessions.setSession( user, token );
@@ -96,7 +92,7 @@ const login = async (req, res) => {
       return res.status(401).send("Authentication failed");
     }
   } catch (error) {
-    console.log(error);
+    res.status(500).send("An unexpected error occurred");
   }
 };
 

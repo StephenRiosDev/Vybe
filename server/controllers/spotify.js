@@ -15,8 +15,6 @@ const search = async (req, res) => {
   // Make sure we are authorized
   await authorize();
 
-  console.log("Spotify Token:", cache.spotifyToken);
-
   // Construct the request URL
   const apiUrl = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track`;
 

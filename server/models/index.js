@@ -2,10 +2,9 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(`postgres://postgres:admin@localhost:5432/spotit`, {dialect: 'postgres'});
 
-sequelize.authenticate().then(() => {
-        console.log('Database connected');
-    })
-    .catch( err => console.log(err));
+sequelize.authenticate()
+    .then(() => {})
+    .catch( () => console.log('Error connecting to database'));
 
 const db = {
     Sequalize: sequelize,
