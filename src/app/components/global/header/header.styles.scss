@@ -3,16 +3,19 @@
 header {
 
   padding: $spacing $spacing calc(#{$spacing} * 2) $spacing;
-  margin-bottom: -($border-radius);
+  height: $headerHeight;
+  margin-bottom: -($borderRadius);
   background-image: $gradient2;
   background-size: 100vw 100vh;
-  border-radius: 0 0 0 $border-radius;
+  border-radius: 0 0 0 $borderRadius;
 
   h1 {
     margin: 0;
 
     a {
 
+      display: inline-block;
+      
       img {
 
         max-width: 147px;

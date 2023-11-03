@@ -9,7 +9,7 @@ export const Header = () => {
       <header>
         <h1>
           <Link href="/">
-            <img src="/images/logo.png" alt="Vybe: Powered by Spotify" />
+            <img src="/images/logo.png" alt="Logo: Vybe: Powered by Spotify" />
           </Link>
         </h1>
       </header>

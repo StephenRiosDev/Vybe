@@ -1,0 +1,46 @@
+@import '../../../globals.scss';
+
+footer {
+
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: $footerHeight;
+  background-image: $gradient5;
+  padding: $spacing;
+  padding-top: calc(#{$spacing} + #{$borderRadius});
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .logo {
+
+    margin-top: calc(#{$spacing} / 3);
+
+    a {
+
+      display: inline-block;
+      
+      img {
+        
+        max-width: 135px;
+      }
+    }
+  }
+
+  menu {
+
+    display: flex;
+    gap: $spacing; 
+    padding: 0;
+    margin-top: calc(#{$spacing} / 2);
+
+    a {
+
+      color: #122724;
+      font-size: .8125rem;
+      text-decoration: none;
+    }
+  }
+}
