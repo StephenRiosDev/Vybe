@@ -1,0 +1,22 @@
+@import '../../../globals.scss';
+
+header {
+
+  padding: $spacing $spacing calc(#{$spacing} * 2) $spacing;
+  margin-bottom: -($border-radius);
+  background-image: $gradient2;
+  background-size: 100vw 100vh;
+  border-radius: 0 0 0 $border-radius;
+
+  h1 {
+    margin: 0;
+
+    a {
+
+      img {
+
+        max-width: 147px;
+      }
+    }
+  }
+}

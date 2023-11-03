@@ -1,0 +1,35 @@
+$gradient1: radial-gradient(75% 75% at 28% 67%, #3F9283FF 0%, #1E453EAD 100%);
+$gradient2: radial-gradient(213.9% 83.85% at 65.7% 35.94%, #295049 0%, #122724 100%);
+$gradient3: radial-gradient(129.15% 66.98% at 67.13% 29.95%, #46756C 0%, #1E453E 100%);
+$gradient4: radial-gradient(75% 75% at 28% 67%, #3F9283FF 0%, #1E453EAD 100%),radial-gradient(75% 75% at 84% 23%, #5DD1A3FF 0%, #071311FF 100%);
+
+$border-radius: 30px;
+$spacing: 20px;
+
+body {
+
+  margin: 0;
+  min-height: 100vh;
+  background-image: $gradient4;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 100;
+  color: #fff;
+
+  h1, h2, h3, h4 {
+
+    font-family: "Baloo 2", sans-serif;
+    margin: 0;
+    line-height: 1;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  p {
+
+    margin: 0;
+    padding: 0;
+    line-height: 1.25;
+  }
+}
