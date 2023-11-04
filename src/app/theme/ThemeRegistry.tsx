@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import NextAppDirEmotionCacheProvider from './EmotionCache';
-import { VybeTheme } from './theme';
+import { VybeTheme } from './theme.js';
 
 export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   return (

@@ -6,7 +6,7 @@ import { ContentWrapper } from "./components/global/contentWrapper/contentWrappe
 import { Footer } from './components/global/footer/footer.component'
 
 import { ThemeProvider } from '@mui/material/styles';
-import { VybeTheme } from './theme/theme';
+import { VybeTheme } from './theme/theme.js';
 
 import "./layout.scss";
 

@@ -1,27 +1,77 @@
-import { Theme, createTheme } from "@mui/material";
+import { Theme, createTheme, ThemeOptions } from "@mui/material";
+import { InputProps } from "@mui/material/Input";
+
+const VARS = {
+  // Colors
+  bgUnfocused: "rgba(255,255,255,.75)",
+  bgFocused: "rgba(255,255,255,1)",
+  borderUnfocused: "2px solid transparent",
+  borderFocused: `2px solid ${VybeTheme.palette.primary[100]}`
+}
 
 export const VybeTheme = createTheme({
 
+  shape: {
+    borderRadius: 35
+  },
+
+  spacing: (factor) => `${0.25 * factor}rem`,
+
+  typography: {
+    fontFamily: ["Quicksand", "sans-serif"].join(","),
+    body1: {
+      letterSpacing: "-0.84px"
+    }
+  },
+
   components: {
 
+    MuiInputBase: {
+      styleOverrides: {
+        root: ({theme}) => ({
+          '.MuiInputBase-input': {
+            padding: theme.spacing(3)
+          },
+          '&[class*="-colorPrimary"]': {
+            color: theme.palette.primary.main,
+            backgroundColor: VARS.bgUnfocused,
+            borderRadius: theme.shape.borderRadius / 2,
+            border: VARS.borderUnfocused,
+            outline: "none",
+            padding: "0",
+            fontSize: "1rem",
+            '&.Mui-focused': {
+              backgroundColor: VARS.bgFocused,
+              border: VARS.borderFocused
+            },
+            '& fieldset': {
+              border: "none",
+              outline: "none"
+            }
+          }
+        })
+      }
+    },
+
     MuiInputLabel: {
-      defaultProps: {
-        shrink: true
-      },
       styleOverrides: {
         root: {
-          styleOverrides: {
-            position: "static",
-            fontSize: "1rem",
-            transform: "none"
+          position: "static",
+          fontSize: "0.875",
+          transform: "none",
+          color: "#FFF",
+          fontWeight: "100",
+          '&.Mui-focused': {
+            color: "#FFF"
           }
-        }
-      }
+        },
+      },
     }
   },
 
   palette: {
     primary: {
+      main: '#46756C',
       50: '#e3e5e5',
       100: '#b8bebd',
       200: '#899392',
