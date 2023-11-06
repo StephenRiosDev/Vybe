@@ -1,22 +1,27 @@
 import React from "react";
 
-import { LoginForm } from "./components/loginForm/loginForm.component";
+import { Grid, Typography } from "@mui/material";
 
-import "./page.scss";
+import { LoginForm } from "./components/loginForm/loginForm.component";
 
 export default function Home() {
 
   return (
     <>
-      <section className="homePage">
+      <Grid container justifyContent="center" component="section" className="homePage">
 
-        <div className="welcome">
-          <h2>Hello There!</h2>
-          <p>Welcome back!</p>
-        </div>
+        <Grid container flexDirection="column" alignItems="center" width="80%" maxWidth="380px">
 
-         <LoginForm />
-      </section>
+          <Grid item minWidth="100%">
+            <Typography variant="h2">Hello There!</Typography>
+            <Typography color="primary.light">Welcome back!</Typography>
+          </Grid>
+
+          <Grid item mt={8} minWidth="100%">
+            <LoginForm />
+          </Grid>
+        </Grid>
+      </Grid>
     </>
   )
 }
