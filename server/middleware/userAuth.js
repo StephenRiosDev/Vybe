@@ -22,7 +22,7 @@ const saveUser = async (req, res, next) => {
   try {
     const username = await User.findOne({
       where: {
-        user_name: req.body.user_name,
+        user_name: req.body.username,
       },
     });
     

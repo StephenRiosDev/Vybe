@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Grid, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+
+import { Grid } from "@mui/material";
 
 import { LoginForm } from "./components/loginForm/loginForm.component";
 
@@ -13,7 +15,7 @@ export default function Home() {
         <Grid container flexDirection="column" alignItems="center" width="80%" maxWidth="380px">
 
           <Grid item minWidth="100%">
-            <LoginForm />
+            <LoginForm redirectTo="/dashboard" />
           </Grid>
         </Grid>
       </Grid>

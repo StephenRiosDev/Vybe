@@ -9,18 +9,20 @@ const UserSessions = require('../cache/userSessions');
 const User = db.users;
 
 // Register a new user
-const signup = async (req, res) => {
+const register = async (req, res) => {
   try {
-    const { user_name, first_name, last_name, email, password } = req.body;
+    const { username, firstName, lastName, email, password } = req.body;
+
     const data = {
-      user_name,
-      first_name,
-      last_name,
-      email,
+      user_name: username,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
       password: await bcrypt.hash(password, 10),
       date_created: new Date(),
       date_modified: new Date()
     };
+
     //saving the user
     const user = await User.create(data);
 
@@ -48,14 +50,17 @@ const signup = async (req, res) => {
 // Authenticate a user
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
+    console.log(username, password);
 
     //find a user by their email
     const user = await User.findOne({
       where: {
-        email: email
+        user_name: username
       }
     });
+
+    console.log(user);
 
     //if user email is found, compare password with bcrypt
     if (user) {
@@ -108,7 +113,7 @@ const logout = (req, res) => {
 }
 
 module.exports = {
-  signup,
+  register,
   login,
   logout
 };

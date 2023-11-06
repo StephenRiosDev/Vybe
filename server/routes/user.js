@@ -1,13 +1,13 @@
 const express = require('express')
 const userController = require('../controllers/user')
-const { signup, login, logout } = userController
+const { register, login, logout } = userController
 const userAuth = require('../middleware/userAuth')
 
 const router = express.Router()
 
 //signup endpoint
 //passing the middleware function to the signup
-router.post('/signup', userAuth.saveUser, signup)
+router.post('/register', userAuth.saveUser, register)
 
 //login route
 router.post('/login', login )
