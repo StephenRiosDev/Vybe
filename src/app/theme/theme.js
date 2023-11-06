@@ -230,6 +230,22 @@ export const VybeTheme = createTheme({
               }
             }
           })
+        },
+        {
+          props: { variant: "vybe-right", color: "secondary" },
+          style: ({ theme }) => ({
+            ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style,
+            '&:before': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style['&:before'],
+              borderColor: `transparent transparent transparent ${theme.palette.secondary[500]} `,
+            },
+            '&:hover': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style['&:hover'],
+              '&:before': {
+                borderColor: `transparent transparent transparent ${theme.palette.secondary[200]}`,
+              }
+            }
+          })
         }
       ]
     },
