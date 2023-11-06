@@ -107,7 +107,7 @@ export const LoginForm = (redirectTo: any) => {
       // Email validation
       if (input.name === "email") {
 
-        if ( !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input.value) ) isErrored = true;
+        if ( !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input.value) ) isErrored = true; // eslint-disable-line
       }
 
       // Set error state
