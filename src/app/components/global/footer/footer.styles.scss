@@ -2,13 +2,13 @@
 
 footer {
 
-  position: fixed;
-  bottom: 0;
   width: 100vw;
   height: $footerHeight;
   background-image: $gradient5;
   padding: $spacing;
   padding-top: calc(#{$spacing} + #{$borderRadius});
+  border-radius: $borderRadius 0 0 0;
+  margin-top: -$borderRadius;
 
   display: flex;
   align-items: center;

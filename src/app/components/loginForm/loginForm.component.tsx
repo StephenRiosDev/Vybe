@@ -56,11 +56,17 @@ export const LoginForm = () => {
 
         <Grid item container flexDirection="row-reverse" justifyContent="space-between">
           <Grid item>
-            <Button variant="vybe-right">Let's Vibe</Button>
+            <Button
+              variant="vybe-right"
+              color={ isRegister ? "secondary" : "primary" }
+            >
+              Let's Vibe
+            </Button>
           </Grid>
           <Grid item>
             <Button 
-              variant={ isRegister ? "vybe-left" : "vybe"} color="secondary"
+              variant={ isRegister ? "vybe-left" : "vybe"} 
+              color={ isRegister ? "primary" : "secondary" }
               onClick={ e=> setIsRegister(!isRegister) }
             >
               { isRegister ? "Login" : "Register"}

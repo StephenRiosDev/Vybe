@@ -4,12 +4,13 @@ $contentHeight: calc(100vh - #{$headerHeight} - #{$footerHeight} + calc(#{$borde
 
 .content-wrapper {
 
-  height: $contentHeight;
+  min-height: $contentHeight;
   background-image: $gradient3;
   border-radius: 0 $borderRadius $borderRadius 0;
 
   padding: calc(#{$spacing} * 1.5);
   padding-top: calc(#{$spacing} + #{$borderRadius});
+  padding-bottom: calc(#{$spacing} + #{$borderRadius});
   box-shadow: 0px 0px 73px rgba(212, 243, 230, .15);
 
   position: relative;
@@ -43,18 +44,4 @@ $contentHeight: calc(100vh - #{$headerHeight} - #{$footerHeight} + calc(#{$borde
 
     transform: scaleY(-1);
   }
-
-  // &:after {
-  //   content: '';
-  //   background: red;
-
-  //   position: absolute;
-  //   left: 0;
-  //   top: 0;
-  //   width: $borderRadius;
-  //   height: calc(#{$borderRadius} * 1);
-
-  //   border-bottom-left-radius: $borderRadius;
-  //   box-shadow: 0 25px 0 #fff;
-  // }
 }

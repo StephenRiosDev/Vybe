@@ -1,10 +1,8 @@
-.content-wrapper {
-  
-  position: relative;
-  z-index: 2;
-}
+@import './globals.scss';
 
-footer {
-  
-  z-index: 1;
+body {
+
+  position: relative;
+  background-image: $gradient3;
+  height: 100vh;
 }
