@@ -13,11 +13,6 @@ export default function Home() {
         <Grid container flexDirection="column" alignItems="center" width="80%" maxWidth="380px">
 
           <Grid item minWidth="100%">
-            <Typography variant="h2">Hello There!</Typography>
-            <Typography color="primary.light">Welcome back!</Typography>
-          </Grid>
-
-          <Grid item mt={8} minWidth="100%">
             <LoginForm />
           </Grid>
         </Grid>

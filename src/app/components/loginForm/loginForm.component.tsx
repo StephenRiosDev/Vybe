@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-import { TextField, Button, Grid, InputAdornment } from '@mui/material';
+import { TextField, Button, Grid, InputAdornment, Typography } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 
 export const LoginForm = () => {
@@ -12,7 +12,15 @@ export const LoginForm = () => {
 
   return (
     <>
+
+      <Grid container flexDirection="column" alignItems="right" mb={8}>
+        <Typography variant="h2">{ isRegister ? 'Registration' : 'Hello There!'}</Typography>
+        <Typography color="primary.light">{ isRegister ? "It's quick, easy, and free!" : 'Welcome back!'}</Typography>
+      </Grid>
+
       <Grid container spacing={6} flexDirection="column" alignItems="center" minWidth="100%">
+
+        
 
         <Grid item minWidth="100%">
           <TextField label={ isRegister ? "Desired Username" : "Username"} name="user-name" />
@@ -45,12 +53,15 @@ export const LoginForm = () => {
 
         { isRegister &&
           <Grid item minWidth="100%">
-            <TextField label="Confirm Password" type={ passwordConfirmVisible ? 'text' : 'password'} InputProps={{
-              endAdornment: 
-                <InputAdornment position="end" onClick={ e => setPasswordConfirmVisible(!passwordConfirmVisible)}>
-                  <Visibility />
-                </InputAdornment>,
-            }} />
+            <TextField 
+              label="Confirm Password" 
+              type={ passwordConfirmVisible ? 'text' : 'password'} 
+              InputProps={{
+                endAdornment: 
+                  <InputAdornment position="end" onClick={ e => setPasswordConfirmVisible(!passwordConfirmVisible)}>
+                    <Visibility />
+                  </InputAdornment>,
+              }} />
           </Grid>
         }
 
@@ -60,7 +71,7 @@ export const LoginForm = () => {
               variant="vybe-right"
               color={ isRegister ? "secondary" : "primary" }
             >
-              Let's Vibe
+              { isRegister ? 'Get Started' : "Let's Vibe" }
             </Button>
           </Grid>
           <Grid item>

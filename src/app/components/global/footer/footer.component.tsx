@@ -1,4 +1,6 @@
 import Link from "next/link"
+import Image from "next/image"
+
 import "./footer.styles.scss"
 
 export const Footer = () => {
@@ -8,7 +10,7 @@ export const Footer = () => {
       <footer>
         <div className="logo">
           <Link href="/">
-            <img src="/images/logo-footer.png" alt="Logo: Vybe: Powered by Spotify" />
+            <Image src="/images/logo-footer.png" alt="Logo: Vybe: Powered by Spotify" width={135} height={44} />
           </Link>
         </div>
 
