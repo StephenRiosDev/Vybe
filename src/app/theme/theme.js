@@ -165,6 +165,29 @@ export const VybeTheme = createTheme({
           })
         },
         {
+          props: { variant: "vybe-left" },
+          style: ({theme}) => ({
+            ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style({theme: theme}),
+            '&:before': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style({theme: theme})['&:before'],
+              borderWidth: "3.5px 7px 3.5px 0",
+              borderColor: `transparent ${theme.palette.primary.light} transparent transparent`,
+              left: theme.spacing(1.5)
+            },
+            '&:after': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style({theme: theme})['&:after'],
+              left: "auto",
+              right: theme.spacing(3)
+            },
+            '&:hover': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-right").style({theme: theme})['&:hover'],
+              '&:before': {
+                left: `-${theme.spacing(1.5)}`
+              }
+            }
+          })
+        },
+        {
           props: { color: "primary" },
           style: ({ theme }) => ({
             ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe").style,
@@ -190,6 +213,22 @@ export const VybeTheme = createTheme({
                 backgroundColor: theme.palette.secondary[200]
               }
             },
+          })
+        },
+        {
+          props: { variant: "vybe-left", color: "secondary" },
+          style: ({ theme }) => ({
+            ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-left").style,
+            '&:before': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-left").style['&:before'],
+              borderColor: `transparent ${theme.palette.secondary[500]} transparent transparent`,
+            },
+            '&:hover': {
+              ...theme.components.MuiButton.variants.find(({ props }) => props.variant === "vybe-left").style['&:hover'],
+              '&:before': {
+                borderColor: `transparent ${theme.palette.secondary[200]} transparent transparent`,
+              }
+            }
           })
         }
       ]

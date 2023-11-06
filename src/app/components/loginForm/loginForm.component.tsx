@@ -30,7 +30,7 @@ export const LoginForm = () => {
             <Button variant="vybe-right">Let's Vibe</Button>
           </Grid>
           <Grid item>
-            <Button variant="vybe" color="secondary">Register</Button>
+            <Button variant="vybe-left" color="secondary">Register</Button>
           </Grid>
         </Grid>
       </Grid>
