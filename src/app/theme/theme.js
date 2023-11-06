@@ -140,7 +140,7 @@ export const VybeTheme = createTheme({
             '&:before': {
               content: '""',
               position: "absolute",
-              top: "calc(100% - 3px)",
+              top: "calc(100% - 0.15rem)",
               left: `calc(100% - ${theme.spacing(3)})`,
               width: "0px",
               height: "0px",
