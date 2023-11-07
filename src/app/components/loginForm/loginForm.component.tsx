@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import axios from "axios";
 import { useRouter } from 'next/navigation';
@@ -132,7 +132,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
       : !Object.values({ username: formData.inputs.username, password: formData.inputs.password }).map(input => input.error).includes(true)
   }
 
-  const handleFormSubmit = async (e: Event | undefined) => {
+  const handleFormSubmit = async (e: FormEvent | void) => {
 
     e?.preventDefault();
     e?.stopPropagation();
@@ -286,7 +286,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
                 variant="vybe-right"
                 type="submit"
                 color={isRegister ? "secondary" : "primary"}
-                onClick={ handleFormSubmit}
+                onClick={ handleFormSubmit }
               >
                 {isRegister ? 'Get Started' : "Let's Vibe"}
               </Button>
