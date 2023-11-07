@@ -155,7 +155,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
           if (success) {
 
             // Go to the redirct page if there is one
-            if (!!redirectTo) router.push(redirectTo);
+            // if (!!redirectTo) router.push(redirectTo);
           }
         })
     }
@@ -180,7 +180,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
 
           <Grid item minWidth="100%">
             <TextField
-              label={isRegister ? "Desired Username" : "Username"}
+              label={isRegister ? "Desired Username" : "Username or Email"}
               name="user-name"
               value={formData.inputs.username.value}
               error={formData.inputs.username.error}

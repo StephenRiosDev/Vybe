@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const db = require("../models");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const AWS = require("aws-sdk");
+const { Op } = require("sequelize");
 
 // UserSessions cache
 const UserSessions = require('../cache/userSessions');
@@ -23,6 +26,7 @@ const register = async (req, res) => {
       date_modified: new Date()
     };
 
+    
     //saving the user
     const user = await User.create(data);
 
@@ -51,30 +55,32 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(username, password);
 
-    //find a user by their email
+    //find a user by their email or username
     const user = await User.findOne({
       where: {
-        user_name: username
+        [Op.or]: [
+          { email: { [Op.iLike]: `%${username}%`} }, 
+          { user_name:  { [Op.iLike]: `%${username}%`} }
+        ]
       }
     });
 
-    console.log(user);
-
-    //if user email is found, compare password with bcrypt
+    //if user is found
     if (user) {
+
+      //  Compare password with bcrypt
       const isSame = await bcrypt.compare(password, user.password);
 
       //if password is the same
-      //generate token with the user's id and the secretKey in the env file
-
       if (isSame) {
+        
+        //generate token with the user's id and the secretKey in the env file
         let token = jwt.sign({ id: user.id }, process.env.PASSKEY, {
           expiresIn: 1 * 24 * 60 * 60 * 1000,
         });
 
-        //if password matches wit the one in the database
+        //if password matches with the one in the database
         //go ahead and generate a cookie for the user
         res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
 
@@ -97,7 +103,8 @@ const login = async (req, res) => {
       return res.status(401).send("Authentication failed");
     }
   } catch (error) {
-    res.status(500).send("An unexpected error occurred");
+    console.log(error);
+    res.status(500).send("We don't know what the fuck just happened. Ask Jesus.");
   }
 };
 
