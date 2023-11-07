@@ -40,7 +40,7 @@ const saveUser = async (req, res, next) => {
 
     //if email exist in the database respond with a status of 409
     if (emailcheck) {
-      return res.status(409).json({error: "Authentication failed"});
+      return res.status(409).json({error: "Email already in use"});
     }
 
     next();

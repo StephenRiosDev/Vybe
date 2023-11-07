@@ -14,7 +14,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState<{ [key: string]: any }>({
     inputs: {
       username: {
@@ -132,9 +132,15 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
       : !Object.values({ username: formData.inputs.username, password: formData.inputs.password }).map(input => input.error).includes(true)
   }
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async (e: Event | undefined) => {
+
+    e?.preventDefault();
+    e?.stopPropagation();
 
     if (formIsValid()) {
+
+      resetFormErrors();
+      setError('');
 
       axios
         .post(isRegister ? '/api/users/register' : '/api/users/login', {
@@ -155,8 +161,16 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
           if (success) {
 
             // Go to the redirct page if there is one
-            // if (!!redirectTo) router.push(redirectTo);
+            if (!!redirectTo) router.push(redirectTo);
+          } else {
+
+            // Set the error state
+            setError(res.data.message);
           }
+        })
+        .catch(err => {
+
+          setError(err.response.data);
         })
     }
   }
@@ -169,15 +183,18 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
   return (
     <>
 
-      {success === '' && <>
+      {/* Page Welcome */}
+      <Grid container flexDirection="column" alignItems="right" mb={8}>
+        <Typography variant="h2">{isRegister ? 'Registration' : 'Hello There!'}</Typography>
+        <Typography color="primary.light">{isRegister ? "It's quick, easy, and free!" : 'Welcome back!'}</Typography>
+      </Grid>
 
-        <Grid container flexDirection="column" alignItems="right" mb={8}>
-          <Typography variant="h2">{isRegister ? 'Registration' : 'Hello There!'}</Typography>
-          <Typography color="primary.light">{isRegister ? "It's quick, easy, and free!" : 'Welcome back!'}</Typography>
-        </Grid>
+      <form onSubmit={ e => handleFormSubmit(e) }>
 
+        {/* Login/Register Form */}
         <Grid container spacing={6} flexDirection="column" alignItems="center" minWidth="100%">
 
+          {/* Inputs */}
           <Grid item minWidth="100%">
             <TextField
               label={isRegister ? "Desired Username" : "Username or Email"}
@@ -255,12 +272,21 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
             </Grid>
           }
 
+          {/* Error */}
+          {!!error &&
+            <>
+              <Typography mt={4}>{error}</Typography>
+            </>
+          }
+
+          {/* Buttons */}
           <Grid item container flexDirection="row-reverse" justifyContent="space-between">
             <Grid item>
               <Button
                 variant="vybe-right"
+                type="submit"
                 color={isRegister ? "secondary" : "primary"}
-                onClick={handleFormSubmit}
+                onClick={ handleFormSubmit}
               >
                 {isRegister ? 'Get Started' : "Let's Vibe"}
               </Button>
@@ -269,7 +295,6 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
               <Button
                 variant={isRegister ? "vybe-left" : "vybe"}
                 color={isRegister ? "primary" : "secondary"}
-                type="submit"
                 onClick={e => setIsRegister(!isRegister)}
               >
                 {isRegister ? "Login" : "Register"}
@@ -277,10 +302,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
             </Grid>
           </Grid>
         </Grid>
-      </>}
-
-      {success !== '' && <Typography variant="h2">{success}</Typography>}
-
+      </form>
     </>
   )
 }

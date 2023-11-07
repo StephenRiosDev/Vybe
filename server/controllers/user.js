@@ -25,7 +25,6 @@ const register = async (req, res) => {
       date_created: new Date(),
       date_modified: new Date()
     };
-
     
     //saving the user
     const user = await User.create(data);
@@ -43,7 +42,9 @@ const register = async (req, res) => {
       //send users details
       return res.status(201).send(user);
     } else {
-      return res.status(409).send("Details are not correct");
+
+      // Return that the login was not successful
+      return res.status(409).send("User could not be created");
     }
   } catch (error) {
     res.status(500).send("An unexpected error occurred");
@@ -54,6 +55,8 @@ const register = async (req, res) => {
 // Authenticate a user
 const login = async (req, res) => {
   try {
+
+    // Get login details
     const { username, password } = req.body;
 
     //find a user by their email or username
@@ -97,14 +100,14 @@ const login = async (req, res) => {
           token: token
         });
       } else {
-        return res.status(401).send("Authentication failed");
+        return res.status(401).send("Login Details Incorrect");
       }
     } else {
-      return res.status(401).send("Authentication failed");
+      return res.status(401).send("Login Details Incorrect");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("We don't know what the fuck just happened. Ask Jesus.");
+    res.status(500).send("An unexpected error occured");
   }
 };
 
