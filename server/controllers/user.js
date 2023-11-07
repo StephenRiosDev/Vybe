@@ -58,6 +58,8 @@ const login = async (req, res) => {
 
     // Get login details
     const { username, password } = req.body;
+    
+    console.log(username, password);
 
     //find a user by their email or username
     const user = await User.findOne({

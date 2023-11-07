@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 
 import { TextField, Button, Grid, InputAdornment, Typography } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
+import { UserService } from '@/app/services/user.service';
+import { UserRegistration } from '@/app/models/user';
 
 export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
 
@@ -68,7 +70,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
     }
   })
 
-  const resetFormErrors = () => {
+  const resetFormErrors = (): void => {
 
     const inputs = { ...formData.inputs };
 
@@ -77,7 +79,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
     setFormData({ ...formData, inputs: { ...formData.inputs, ...inputs } })
   }
 
-  const updateForm = (name: string, value: string) => {
+  const updateForm = (name: string, value: string): void => {
 
     setFormData({
       ...formData,
@@ -91,7 +93,7 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
     })
   }
 
-  const formIsValid = () => {
+  const formIsValid = (): boolean => {
 
     const inputs = { ...formData.inputs };
 
@@ -132,6 +134,16 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
       : !Object.values({ username: formData.inputs.username, password: formData.inputs.password }).map(input => input.error).includes(true)
   }
 
+  const getLoginData = (): { username: string, password: string } => {
+
+    return { username: formData.inputs.username.value, password: formData.inputs.password.value }
+  }
+
+  const getRegistrationData = (): UserRegistration => {
+    
+    return formData.inputs.values.reduce((acc: any, cur: any) => ({ ...acc, [cur.name]: cur.value }), {})
+  }
+
   const handleFormSubmit = async (e: FormEvent | void) => {
 
     e?.preventDefault();
@@ -142,34 +154,16 @@ export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
       resetFormErrors();
       setError('');
 
-      axios
-        .post(isRegister ? '/api/users/register' : '/api/users/login', {
-          username: formData.inputs.username.value,
-          password: formData.inputs.password.value,
-          ...(isRegister && {
-            email: formData.inputs.email.value,
-            firstName: formData.inputs.firstName.value,
-            lastName: formData.inputs.lastName.value
-          })
+      // Get the result of the login or registration from the user service
+      UserService[( isRegister ? 'register' : 'login' )](isRegister ? getRegistrationData() as any : getLoginData() as any)
+        .then( res => {
+          
+          // This should only happen if the call to login is successful
+          if ( redirectTo ) router.push(redirectTo);
         })
-        .then(res => {
+        .catch( err => {
 
-          // Get success state
-          const success = res.status >= 200 && res.status <= 299
-
-          // If we succeeded
-          if (success) {
-
-            // Go to the redirct page if there is one
-            if (!!redirectTo) router.push(redirectTo);
-          } else {
-
-            // Set the error state
-            setError(res.data.message);
-          }
-        })
-        .catch(err => {
-
+          // Set the error message to display to the user
           setError(err.response.data);
         })
     }

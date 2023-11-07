@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize(`postgres://postgres:admin@localhost:5432/spotit`, {dialect: 'postgres'});
+const sequelize = new Sequelize(`postgres://postgres:admin@localhost:5432/vybe`, {dialect: 'postgres'});
 
 sequelize.authenticate()
     .then(() => {})
