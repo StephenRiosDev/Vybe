@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 
+import { Typography } from "@mui/material"
+
 import "./header.styles.scss"
 
 export const Header = () => {
@@ -8,11 +10,11 @@ export const Header = () => {
   return (
     <>
       <header>
-        <h1>
+        <Typography mt="5px">
           <Link href="/">
-            <Image priority src="/images/logo.png" alt="Logo: Vybe: Powered by Spotify" width={200} height={60} />
+            <Image priority src="/images/logo.png" alt="Logo: Vybe: Powered by Spotify" width={175} height={52.5} />
           </Link>
-        </h1>
+        </Typography>
       </header>
     </>
   )
