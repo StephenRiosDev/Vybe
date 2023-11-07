@@ -10,7 +10,7 @@ export const Footer = () => {
       <footer>
         <div className="logo">
           <Link href="/">
-            <Image src="/images/logo-footer.png" alt="Logo: Vybe: Powered by Spotify" width={135} height={44} />
+            <Image src="/images/logo-footer.png" alt="Logo: Vybe: Powered by Spotify" width={150} height={45} />
           </Link>
         </div>
 

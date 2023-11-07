@@ -1,5 +1,4 @@
-import { Theme, createTheme, ThemeOptions } from "@mui/material";
-import { InputProps } from "@mui/material/Input";
+import { createTheme } from "@mui/material";
 
 export const VybeTheme = createTheme({
 
@@ -70,14 +69,6 @@ export const VybeTheme = createTheme({
           }
         })
       }
-    },
-
-    MuiInputAdornment: {
-      styleOverrides: {
-        root: {
-          pointerEvents: "none",
-        },
-      },
     },
 
     MuiInputLabel: {
@@ -279,7 +270,7 @@ export const VybeTheme = createTheme({
   palette: {
     primary: {
       main: '#46756C',
-      light: '#C5E2DD',
+      light: '#ABEDE1',
       50: '#e3e5e5',
       100: '#b8bebd',
       200: '#899392',
