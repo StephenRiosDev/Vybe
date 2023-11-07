@@ -4,7 +4,7 @@ import { InputProps } from "@mui/material/Input";
 export const VybeTheme = createTheme({
 
   shape: {
-    borderRadius: 35
+    borderRadius: '2.188rem'
   },
 
   spacing: (factor) => `${0.25 * factor}rem`,
@@ -43,7 +43,7 @@ export const VybeTheme = createTheme({
           '&[class*="-colorPrimary"]': {
             color: theme.palette.primary.main,
             backgroundColor: VARS.bgUnfocused,
-            borderRadius: theme.shape.borderRadius / 2,
+            borderRadius: `calc(${theme.shape.borderRadius} / 2)`,
             border: VARS.borderUnfocused,
             outline: "none",
             padding: "0",
@@ -64,14 +64,25 @@ export const VybeTheme = createTheme({
             '.MuiInputAdornment-root': {
               color: theme.palette.primary.main
             }
+          },
+          '&.Mui-error': {
+              border: `0.125rem solid ${theme.palette.warning[100]}`,
           }
         })
       }
     },
 
-    MuiInputLabel: {
+    MuiInputAdornment: {
       styleOverrides: {
         root: {
+          pointerEvents: "none",
+        },
+      },
+    },
+
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({theme}) => ({
           position: "static",
           fontSize: "0.875",
           transform: "none",
@@ -79,8 +90,11 @@ export const VybeTheme = createTheme({
           fontWeight: "100",
           '&.Mui-focused': {
             color: "#FFF"
+          },
+          '&.Mui-error': {
+            color: theme.palette.warning[100]
           }
-        },
+        }),
       },
     },
 
@@ -252,6 +266,9 @@ export const VybeTheme = createTheme({
 
     MuiTypography: {
       styleOverrides: {
+        body1: ({theme}) => ({
+          color: theme.palette.primary.light
+        }),
         h2: ({theme}) =>  ({
           color: theme.palette.primary.light
         })
@@ -365,6 +382,6 @@ const VARS = {
   // Colors
   bgUnfocused: "rgba(255,255,255,.65)",
   bgFocused: "rgba(255,255,255,1)",
-  borderUnfocused: "2px solid transparent",
-  borderFocused: `2px solid ${VybeTheme.palette.primary[100]}`
+  borderUnfocused: "0.125rem solid transparent",
+  borderFocused: `0.125rem solid ${VybeTheme.palette.primary[100]}`
 }

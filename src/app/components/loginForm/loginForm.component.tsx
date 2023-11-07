@@ -2,14 +2,14 @@
 import { useEffect, useState } from 'react';
 
 import axios from "axios";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { TextField, Button, Grid, InputAdornment, Typography } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 
-export const LoginForm = (redirectTo: any) => {
+export const LoginForm = ({ redirectTo }: { redirectTo: string }) => {
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
@@ -68,6 +68,15 @@ export const LoginForm = (redirectTo: any) => {
     }
   })
 
+  const resetFormErrors = () => {
+
+    const inputs = { ...formData.inputs };
+
+    for (const input of Object.values(inputs) as any) { input.error = false }
+
+    setFormData({ ...formData, inputs: { ...formData.inputs, ...inputs } })
+  }
+
   const updateForm = (name: string, value: string) => {
 
     setFormData({
@@ -95,7 +104,7 @@ export const LoginForm = (redirectTo: any) => {
       if (input.required && input.value === "") isErrored = true;
 
       // Password validation
-      if ( isRegister && (input.name === "password" || input.name === "passwordConfirm")) {
+      if (isRegister && (input.name === "password" || input.name === "passwordConfirm")) {
 
         // The "other" password input
         const other = input.name === "password" ? formData.inputs.passwordConfirm : formData.inputs.password;
@@ -107,7 +116,7 @@ export const LoginForm = (redirectTo: any) => {
       // Email validation
       if (input.name === "email") {
 
-        if ( !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input.value) ) isErrored = true; // eslint-disable-line
+        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(input.value)) isErrored = true; // eslint-disable-line
       }
 
       // Set error state
@@ -122,149 +131,156 @@ export const LoginForm = (redirectTo: any) => {
       ? !Object.values(formData.inputs).map((input: any) => input.error).includes(true)
       : !Object.values({ username: formData.inputs.username, password: formData.inputs.password }).map(input => input.error).includes(true)
   }
-  
+
   const handleFormSubmit = async () => {
 
-      if ( formIsValid() ) {
+    if (formIsValid()) {
 
-        axios
-          .post( isRegister ? '/api/users/register' : '/api/users/login', {
-            username: formData.inputs.username.value,
-            password: formData.inputs.password.value,
-            ...(isRegister && {
-              email: formData.inputs.email.value,
-              firstName: formData.inputs.firstName.value,
-              lastName: formData.inputs.lastName.value
-            })
+      axios
+        .post(isRegister ? '/api/users/register' : '/api/users/login', {
+          username: formData.inputs.username.value,
+          password: formData.inputs.password.value,
+          ...(isRegister && {
+            email: formData.inputs.email.value,
+            firstName: formData.inputs.firstName.value,
+            lastName: formData.inputs.lastName.value
           })
-          .then( res => {
-            console.log(res.status);
-            const success = res.status >= 200 && res.status <= 299
-            
-            if ( success ) {
-              setSuccess( `${ isRegister ? "Registration" : "Login"} successful!`);
+        })
+        .then(res => {
 
-              // if ( redirectTo ) router.push( redirectTo );
-            }
-          })
-      }
+          // Get success state
+          const success = res.status >= 200 && res.status <= 299
+
+          // If we succeeded
+          if (success) {
+
+            // Go to the redirct page if there is one
+            if (!!redirectTo) router.push(redirectTo);
+          }
+        })
     }
+  }
 
-    return (
-      <>
+  useEffect(() => {
 
-        { success === '' && <>
-        
-          <Grid container flexDirection="column" alignItems="right" mb={8}>
-            <Typography variant="h2">{isRegister ? 'Registration' : 'Hello There!'}</Typography>
-            <Typography color="primary.light">{isRegister ? "It's quick, easy, and free!" : 'Welcome back!'}</Typography>
+    resetFormErrors();
+  }, [isRegister])
+
+  return (
+    <>
+
+      {success === '' && <>
+
+        <Grid container flexDirection="column" alignItems="right" mb={8}>
+          <Typography variant="h2">{isRegister ? 'Registration' : 'Hello There!'}</Typography>
+          <Typography color="primary.light">{isRegister ? "It's quick, easy, and free!" : 'Welcome back!'}</Typography>
+        </Grid>
+
+        <Grid container spacing={6} flexDirection="column" alignItems="center" minWidth="100%">
+
+          <Grid item minWidth="100%">
+            <TextField
+              label={isRegister ? "Desired Username" : "Username"}
+              name="user-name"
+              value={formData.inputs.username.value}
+              error={formData.inputs.username.error}
+              onChange={e => updateForm("username", e.target.value)}
+            />
           </Grid>
 
-          <Grid container spacing={6} flexDirection="column" alignItems="center" minWidth="100%">
-
-            <Grid item minWidth="100%">
-              <TextField
-                label={isRegister ? "Desired Username" : "Username"}
-                name="user-name"
-                value={formData.inputs.username.value}
-                error={formData.inputs.username.error}
-                onChange={e => updateForm("username", e.target.value)}
-              />
-            </Grid>
-
-            {isRegister &&
-              <>
-                <Grid item minWidth="100%">
-                  <TextField
-                    label="Email"
-                    name="email"
-                    value={formData.inputs.email.value}
-                    error={formData.inputs.email.error}
-                    onChange={e => updateForm("email", e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item minWidth="100%">
-                  <TextField
-                    label="First Name"
-                    name="first-name"
-                    value={formData.inputs.firstName.value}
-                    error={formData.inputs.firstName.error}
-                    onChange={e => updateForm("firstName", e.target.value)}
-                  />
-                </Grid>
-
-                <Grid item minWidth="100%">
-                  <TextField
-                    label="Last Name"
-                    name="last-name"
-                    value={formData.inputs.lastName.value}
-                    error={formData.inputs.lastName.error}
-                    onChange={e => updateForm("lastName", e.target.value)}
-                  />
-                </Grid>
-              </>
-            }
-
-            <Grid item minWidth="100%">
-              <TextField
-                label="Password"
-                type={passwordVisible ? 'text' : 'password'}
-                value={formData.inputs.password.value}
-                error={formData.inputs.password.error}
-                onChange={e => updateForm("password", e.target.value)}
-                InputProps={{
-                  endAdornment:
-                    <InputAdornment position="end" onClick={e => setPasswordVisible(!passwordVisible)}>
-                      <Visibility />
-                    </InputAdornment>,
-                }}
-              />
-            </Grid>
-
-            {isRegister &&
+          {isRegister &&
+            <>
               <Grid item minWidth="100%">
                 <TextField
-                  label="Confirm Password"
-                  type={passwordConfirmVisible ? 'text' : 'password'}
-                  value={formData.inputs.passwordConfirm.value}
-                  error={formData.inputs.passwordConfirm.error}
-                  onChange={e => updateForm("passwordConfirm", e.target.value)}
-                  InputProps={{
-                    endAdornment:
-                      <InputAdornment position="end" onClick={e => setPasswordConfirmVisible(!passwordConfirmVisible)}>
-                        <Visibility />
-                      </InputAdornment>,
-                  }} />
+                  label="Email"
+                  name="email"
+                  value={formData.inputs.email.value}
+                  error={formData.inputs.email.error}
+                  onChange={e => updateForm("email", e.target.value)}
+                />
               </Grid>
-            }
 
-            <Grid item container flexDirection="row-reverse" justifyContent="space-between">
-              <Grid item>
-                <Button
-                  variant="vybe-right"
-                  color={isRegister ? "secondary" : "primary"}
-                  onClick={handleFormSubmit}
-                >
-                  {isRegister ? 'Get Started' : "Let's Vibe"}
-                </Button>
+              <Grid item minWidth="100%">
+                <TextField
+                  label="First Name"
+                  name="first-name"
+                  value={formData.inputs.firstName.value}
+                  error={formData.inputs.firstName.error}
+                  onChange={e => updateForm("firstName", e.target.value)}
+                />
               </Grid>
-              <Grid item>
-                <Button
-                  variant={isRegister ? "vybe-left" : "vybe"}
-                  color={isRegister ? "primary" : "secondary"}
-                  type="submit"
-                  onClick={e => setIsRegister(!isRegister)}
-                >
-                  {isRegister ? "Login" : "Register"}
-                </Button>
+
+              <Grid item minWidth="100%">
+                <TextField
+                  label="Last Name"
+                  name="last-name"
+                  value={formData.inputs.lastName.value}
+                  error={formData.inputs.lastName.error}
+                  onChange={e => updateForm("lastName", e.target.value)}
+                />
               </Grid>
+            </>
+          }
+
+          <Grid item minWidth="100%">
+            <TextField
+              label="Password"
+              type={passwordVisible ? 'text' : 'password'}
+              value={formData.inputs.password.value}
+              error={formData.inputs.password.error}
+              onChange={e => updateForm("password", e.target.value)}
+              InputProps={{
+                endAdornment:
+                  <InputAdornment position="end" onClick={e => setPasswordVisible(!passwordVisible)}>
+                    <Visibility />
+                  </InputAdornment>,
+              }}
+            />
+          </Grid>
+
+          {isRegister &&
+            <Grid item minWidth="100%">
+              <TextField
+                label="Confirm Password"
+                type={passwordConfirmVisible ? 'text' : 'password'}
+                value={formData.inputs.passwordConfirm.value}
+                error={formData.inputs.passwordConfirm.error}
+                onChange={e => updateForm("passwordConfirm", e.target.value)}
+                InputProps={{
+                  endAdornment:
+                    <InputAdornment position="end" onClick={e => setPasswordConfirmVisible(!passwordConfirmVisible)}>
+                      <Visibility />
+                    </InputAdornment>,
+                }} />
+            </Grid>
+          }
+
+          <Grid item container flexDirection="row-reverse" justifyContent="space-between">
+            <Grid item>
+              <Button
+                variant="vybe-right"
+                color={isRegister ? "secondary" : "primary"}
+                onClick={handleFormSubmit}
+              >
+                {isRegister ? 'Get Started' : "Let's Vibe"}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant={isRegister ? "vybe-left" : "vybe"}
+                color={isRegister ? "primary" : "secondary"}
+                type="submit"
+                onClick={e => setIsRegister(!isRegister)}
+              >
+                {isRegister ? "Login" : "Register"}
+              </Button>
             </Grid>
           </Grid>
-        </> }
+        </Grid>
+      </>}
 
-        { success !== '' && <Typography variant="h2">{success}</Typography> }
+      {success !== '' && <Typography variant="h2">{success}</Typography>}
 
-      </>
-    )
-  }
+    </>
+  )
+}

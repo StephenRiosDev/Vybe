@@ -1,10 +1,11 @@
+import { Typography } from "@mui/material";
 
 
 export default function Dashboard() {
 
   return (
     <>
-      <h1>Dashboard</h1>
+      <Typography variant="h2">Welcome to Vybe!</Typography>
     </>
   )
 
