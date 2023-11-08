@@ -1,5 +1,5 @@
 const express = require('express')
-const spotifyController = require('../controllers/spotify')
+const spotifyController = require('../controllers/spotify_app')
 const { search, getGenres, authorize } = spotifyController
 
 const router = express.Router()
