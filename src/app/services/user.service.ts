@@ -6,18 +6,21 @@ class _UserService {
 
   constructor(){};
 
+  static session: User | undefined;
+
   // Internal Functions
 
     // Sets the user data to local storage
     static setActiveSession = ( user: User ): void => {
     
-      window.localStorage.setItem('user', JSON.stringify(user))
+      this.session = user;
+      console.log( this.session );
     }
 
     // Clears the user data from local storage
     static clearActiveSession = (): void => {
 
-      window.localStorage.removeItem('user');
+      delete this.session;
     }
 
   // Public Functions
@@ -25,27 +28,20 @@ class _UserService {
     // Returns the current session data
     getActiveSession = (): User | undefined => {
 
-      const userData = window.localStorage.getItem('user') as string;
-    
-      if ( userData ) {
-    
-        return JSON.parse(userData) as User;
-      }
-      
-      return;
+      return _UserService.session;
     }
 
     // Returns just the user token for the logged in user
     getUserToken = (): string | undefined => {
     
-      return JSON.parse(window.localStorage.getItem('user') as string || "{}")?.token;
+      return _UserService.session?.token;
     }
 
     // Logs a user in using a username and password
     login = async ( user: UserLogin ): Promise<User | Error> => {
-    
+     
       return new Promise((resolve, reject) => {
-
+        
         axios
           .post('/api/users/login', user )
           .then( res => {
@@ -118,9 +114,11 @@ class _UserService {
 
     // Gets authorization headers for the currently logged in user
     getAuthorizationHeaders = (): { Authorization: string } | void => {
-      
+
+      console.log( _UserService.session);
+
       // Get the users token from local storage
-      const token = JSON.parse(window.localStorage.getItem('user') as string || "{}")?.token;
+      const token = _UserService.session?.token;
       
       // If we got a token
       if ( token ) {

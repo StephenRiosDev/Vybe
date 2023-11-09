@@ -5,17 +5,41 @@ const gravatar = require("gravatar");
 const AWS = require("aws-sdk");
 const { Op } = require("sequelize");
 
-// UserSessions cache
-const UserSessions = require('../cache/userSessions');
-
 // Assigning users to the variable User
 const User = db.users;
 
 // Register a new user
 const register = async (req, res) => {
+
   try {
+
     const { username, firstName, lastName, email, password } = req.body;
 
+    //search the database to see if user exist
+    const usernamecheck = await User.findOne({
+      where: {
+        user_name: username,
+      },
+    });
+    
+    //if username exist in the database respond with a status of 409
+    if (usernamecheck) {
+      return res.status(409).json({error: "Username already exists"});
+    }
+
+    //checking if email already exist
+    const emailcheck = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    //if email exist in the database respond with a status of 409
+    if (emailcheck) {
+      return res.status(409).json({error: "Email already in use"});
+    }
+
+    // Create the user data
     const data = {
       user_name: username,
       first_name: firstName,
@@ -26,21 +50,18 @@ const register = async (req, res) => {
       date_modified: new Date()
     };
     
-    //saving the user
+    //save the user
     const user = await User.create(data);
 
     //if user details is captured
-    //generate token with the user's id and the secretKey in the env file
-    // set cookie with the token generated
     if (user) {
-      let token = jwt.sign({ id: user.id }, process.env.PASSKEY, {
-        expiresIn: 1 * 24 * 60 * 60 * 1000,
-      });
-
-      res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
+      
+      // Create token and cookie
+      createTokenAndCookie( user, res );
 
       //send users details
       return res.status(201).send(user);
+
     } else {
 
       // Return that the login was not successful
@@ -48,7 +69,7 @@ const register = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send("An unexpected error occurred");
-  }
+  };
 };
 
 
@@ -59,8 +80,6 @@ const login = async (req, res) => {
     // Get login details
     const { username, password } = req.body;
     
-    console.log(username, password);
-
     //find a user by their email or username
     const user = await User.findOne({
       where: {
@@ -80,27 +99,18 @@ const login = async (req, res) => {
       //if password is the same
       if (isSame) {
         
-        //generate token with the user's id and the secretKey in the env file
-        let token = jwt.sign({ id: user.id }, process.env.PASSKEY, {
-          expiresIn: 1 * 24 * 60 * 60 * 1000,
-        });
-
-        //if password matches with the one in the database
-        //go ahead and generate a cookie for the user
-        res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-
-        // Add the user session for this user now that they are logged in
-        UserSessions.setSession( user, token );
+        // Create token and cookie
+        createTokenAndCookie( user, res );
 
         //send user data
         return res.status(201).send({
-          user_name: user.user_name,
+          username: user.user_name,
+          firstName: user.first_name,
+          lastName: user.last_name,
           email: user.email,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          id: user.id,
-          token: token
+          avatar_url: user.avatar_url
         });
+
       } else {
         return res.status(401).send("Login Details Incorrect");
       }
@@ -116,16 +126,24 @@ const login = async (req, res) => {
 // Log a user out
 const logout = (req, res) => {
 
-  // Remove the user session for this user
-  const success = UserSessions.unsetSession( req.body.sessionId );
+  // Remove the users HTTP-Only cookie to invalidate their session
+  res.setHeader('Set-Cookie', 'token=; HttpOnly; Secure; SameSite=Strict; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
 
   // Send a success message
-  if (success ) res.status(200).send('User logged out successfully')
-  else res.status(409).send('User not logged out successfully')
+  res.status(200).send('User logged out successfully')
+}
+
+const createTokenAndCookie = (user, res) => {
+
+  // Set the user token
+  const token = jwt.sign( user.toJSON(), process.env.PASSKEY, { expiresIn: 1 * 24 * 60 * 60 * 1000 } );
+
+  // Set the session cookie
+  res.cookie("token", token, {HttpOnly: true, MaxAge: 1 * 24 * 60 * 60 * 1000, SameSite: "strict", Path: "/"});
 }
 
 module.exports = {
-  register,
+  register, 
   login,
   logout
 };
