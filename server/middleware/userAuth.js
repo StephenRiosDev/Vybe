@@ -22,8 +22,6 @@ const isWhitelisted = ( url ) => {
 
 const authenticateSession = (req, res, next) => {
 
-  console.log(" AND FUCK YOU TO BITCH")
-
   // If this URL is whitelisted, do not authenticate
   if ( isWhitelisted(req.url) ) {
     next();
