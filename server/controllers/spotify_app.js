@@ -1,5 +1,4 @@
 const axios = require('axios');
-const UserSessions = require('../cache/userSessions');
 
 const cache = {};
 
